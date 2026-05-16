@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.MukundaKatta/whitespace",
+  "description": "MCP server: normalize, trim, collapse, or expand whitespace in text.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/MukundaKatta/whitespace-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/MukundaKatta/whitespace-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@mukundakatta/whitespace-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
