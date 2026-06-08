@@ -34,3 +34,30 @@ test('default does very little', () => {
   // Only unify_newlines (default true) — no trimming/collapsing.
   assert.equal(normalize('  a  b  '), '  a  b  ');
 });
+
+test('combined toggles match the README example', () => {
+  assert.equal(
+    normalize('  hello \t world  \n\n\n  ', {
+      trim: true,
+      collapse_inline: true,
+      strip_empty_lines: true,
+    }),
+    'hello world',
+  );
+});
+
+test('unify_newlines can be disabled', () => {
+  assert.equal(normalize('a\r\nb', { unify_newlines: false }), 'a\r\nb');
+});
+
+test('expand_tabs of 0 or negative leaves tabs untouched', () => {
+  assert.equal(normalize('a\tb', { expand_tabs: 0 }), 'a\tb');
+  assert.equal(normalize('a\tb', { expand_tabs: -3 }), 'a\tb');
+});
+
+test('empty string stays empty', () => {
+  assert.equal(
+    normalize('', { trim: true, collapse_inline: true, strip_empty_lines: true }),
+    '',
+  );
+});

@@ -8,6 +8,9 @@
  * HTML output.
  */
 
+import { realpathSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -87,7 +90,23 @@ function errorResult(message: string) {
   return { isError: true, content: [{ type: 'text', text: message }] };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+/**
+ * True when this module is the program entrypoint. Resolves the invoked path
+ * through realpath and pathToFileURL so detection still works when the `bin`
+ * is run via a symlink (e.g. `npx`) or from a path containing spaces or other
+ * characters that import.meta.url percent-encodes.
+ */
+function isMain(): boolean {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return import.meta.url === pathToFileURL(realpathSync(entry)).href;
+  } catch {
+    return false;
+  }
+}
+
+if (isMain()) {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   process.stderr.write(`whitespace MCP server v${VERSION} ready on stdio\n`);
